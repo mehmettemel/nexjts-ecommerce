@@ -1,10 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const CartInfo = () => {
-  const [address, setAddress] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [mobile, setMobile] = useState('')
+const CartInfo = ({ shippingState, onChangeHandler }) => {
   return (
     <form
       noValidate=''
@@ -22,11 +18,12 @@ const CartInfo = () => {
               First name
             </label>
             <input
-              onChange={(e) => setFirstName(e.target.value)}
-              value={firstName}
+              onChange={onChangeHandler}
+              value={shippingState.firstName}
               id='firstname'
+              name='firstName'
               type='text'
-              placeholder='Last name'
+              placeholder='First Name'
               className='vercel-button'
             />
           </div>
@@ -35,9 +32,10 @@ const CartInfo = () => {
               Last name
             </label>
             <input
-              onChange={(e) => setLastName(e.target.value)}
-              value={lastName}
+              onChange={onChangeHandler}
+              value={shippingState.lastName}
               id='lastname'
+              name='lastName'
               type='text'
               placeholder='Last name'
               className='vercel-button'
@@ -48,8 +46,9 @@ const CartInfo = () => {
               Mobile Number
             </label>
             <input
-              onChange={(e) => setMobile(e.target.value)}
-              value={mobile}
+              onChange={onChangeHandler}
+              value={shippingState.mobile}
+              name='mobile'
               id='mobile'
               type='mobile'
               placeholder='Your mobile number'
@@ -61,8 +60,9 @@ const CartInfo = () => {
               Address
             </label>
             <input
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
+              onChange={onChangeHandler}
+              value={shippingState.address}
+              name='address'
               id='address'
               type='text'
               placeholder=''

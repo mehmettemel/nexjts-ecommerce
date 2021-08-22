@@ -47,8 +47,8 @@ const Navbar = () => {
           <li>
             <a
               onClick={handleLogout}
-              aria-label='Sign in'
-              title='Sign in'
+              aria-label='Logout'
+              title='Logout'
               className={`font-medium tracking-wide transition-colors duration-200 text-gray-100 cursor-pointer hover:text-teal-accent-400 `}
             >
               Logout
@@ -192,7 +192,7 @@ const Navbar = () => {
                 </svg>
               </button>
               {isMenuOpen && (
-                <div className='absolute top-0 left-0 w-full'>
+                <div className='absolute top-0 left-0 w-full z-20'>
                   <div className='p-5 bg-white border rounded shadow-sm'>
                     <div className='flex items-center justify-between mb-4'>
                       <div>
@@ -267,28 +267,56 @@ const Navbar = () => {
                           </Link>
                         </li>
 
-                        <li>
-                          <Link href='/signin'>
-                            <a
-                              aria-label='Sign in'
-                              title='Sign in'
-                              className='font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400'
-                            >
-                              Sign in
-                            </a>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href='/signup'>
-                            <a
-                              className='inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none'
-                              aria-label='Sign up'
-                              title='Sign up'
-                            >
-                              Sign up
-                            </a>
-                          </Link>
-                        </li>
+                        {Object.keys(auth).length === 0 ? (
+                          <ul className='flex items-center hidden ml-auto space-x-8 lg:flex'>
+                            <li>
+                              <Link href='/signin'>
+                                <a
+                                  aria-label='Sign in'
+                                  title='Sign in'
+                                  className='font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400'
+                                >
+                                  Sign in
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href='/signup'>
+                                <a
+                                  className='inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none'
+                                  aria-label='Sign up'
+                                  title='Sign up'
+                                >
+                                  Sign up
+                                </a>
+                              </Link>
+                            </li>
+                          </ul>
+                        ) : (
+                          <>
+                            <li>
+                              <Link href='/profile'>
+                                <a
+                                  aria-label='Profile'
+                                  title='Profile'
+                                  className='font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400'
+                                >
+                                  Profile
+                                </a>
+                              </Link>
+                            </li>
+                            <li>
+                              <a
+                                onClick={handleLogout}
+                                aria-label='Logout'
+                                title='Logout'
+                                className='font-medium tracking-wide  transition-colors duration-200 text-deep-purple-accent-400'
+                              >
+                                Logout
+                              </a>
+                            </li>
+                          </>
+                        )}
                       </ul>
                     </nav>
                   </div>

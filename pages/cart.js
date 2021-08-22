@@ -4,13 +4,37 @@ import React, { useContext, useEffect, useState } from 'react'
 import CartInfo from '../components/cart/CartInfo'
 import CartItem from '../components/cart/CartItem'
 import { DataContext } from '../store/GlobalState'
-import { getData } from '../utils/fetchData'
+import { getData, postData } from '../utils/fetchData'
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext)
   const { cart, auth } = state
 
   const [total, setTotal] = useState(0)
+  const [shippingState, setShippingState] = useState({
+    address: '',
+    firstName: '',
+    lastName: '',
+    mobile: '',
+  })
+
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target
+    setShippingState({ ...shippingState, [name]: value })
+  }
+
+  const handlePayment = async () => {
+    // dispatch({ type: 'NOTIFY', loading: true })
+    postData('order', { shippingState, cart, total }, auth.token).then(
+      (res) => {
+        if (res.err)
+          return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+
+        dispatch({ type: 'ADD_CART', payload: [] })
+        return dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
+      }
+    )
+  }
 
   useEffect(() => {
     const getTotal = () => {
@@ -30,7 +54,7 @@ const Cart = () => {
       const updateCart = async () => {
         for (const item of cartLocal) {
           const res = await getData(`product/${item._id}`)
-          const { _id, title, images, price, inStock } = res.product
+          const { _id, title, images, price, inStock, sold } = res.product
           if (inStock > 0) {
             newArr.push({
               _id,
@@ -38,6 +62,7 @@ const Cart = () => {
               images,
               price,
               inStock,
+              sold,
               quantity: item.quantity > inStock ? 1 : item.quantity,
             })
           }
@@ -70,7 +95,10 @@ const Cart = () => {
                 ))}
               </ul>
 
-              <CartInfo />
+              <CartInfo
+                shippingState={shippingState}
+                onChangeHandler={onChangeHandler}
+              />
               <div className='space-y-1 text-right'>
                 <p>
                   Total amount:
@@ -89,7 +117,7 @@ const Cart = () => {
                 </Link>
                 <Link href={auth.user ? '#' : '/signin'}>
                   <a>
-                    <Button width='50%'>
+                    <Button width='50%' onClick={handlePayment}>
                       <span className='sr-only sm:not-sr-only'>
                         Continue to
                       </span>{' '}

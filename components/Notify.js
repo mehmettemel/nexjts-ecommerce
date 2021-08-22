@@ -6,7 +6,7 @@ const Notify = () => {
   const { notify } = state
 
   useEffect(() => {
-    if (notify.error) {
+    if (notify.error || notify.success) {
       var x = document.getElementById('snackbar')
       x.className = 'vercel-snackbar-show fadeIn'
       setTimeout(function () {
@@ -14,7 +14,7 @@ const Notify = () => {
           'vercel-snackbar-show fadeIn',
           'vercel-snackbar'
         )
-      }, 3000)
+      }, 5000)
     }
   }, [notify])
 
@@ -23,8 +23,13 @@ const Notify = () => {
       <div className={`max-w-md mx-auto mt-10 absolute bottom-20 right-10 `}>
         {notify.loading && <Loading />}
         {notify.error && (
-          <div id='snackbar' className='vercel-snackbar' label='warning'>
+          <div id='snackbar' className='vercel-snackbar'>
             {notify.error}
+          </div>
+        )}
+        {notify.success && (
+          <div id='snackbar' className='vercel-snackbar'>
+            {notify.success}
           </div>
         )}
       </div>

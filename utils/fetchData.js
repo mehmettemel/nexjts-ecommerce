@@ -40,7 +40,7 @@ export const putData = async (url, post, token) => {
   return data
 }
 
-export const pathData = async (url, post, token) => {
+export const patchData = async (url, post, token) => {
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'PATCH',
     headers: {
@@ -53,6 +53,7 @@ export const pathData = async (url, post, token) => {
   const data = await res.json()
   return data
 }
+
 export const deleteData = async (url, token) => {
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'DELETE',
