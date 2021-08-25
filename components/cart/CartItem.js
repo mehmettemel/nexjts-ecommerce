@@ -34,7 +34,7 @@ const CartItem = ({ item, cart }) => {
     <li className='flex flex-col py-6 sm:flex-row sm:justify-between'>
       <div className='flex w-full space-x-2 sm:space-x-4'>
         <img
-          className='flex-shrink-0 object-cover w-20 h-20 border-transparent rounded outline-none sm:w-32 sm:h-32'
+          className='flex-shrink-0 object-cover w-20 h-32 border-transparent rounded outline-none sm:w-32 sm:h-full'
           src={item.images[0].url}
           alt={item.images[0].url}
         />

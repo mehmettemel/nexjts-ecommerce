@@ -16,6 +16,10 @@ const ProductItem = ({ product }) => {
   const { cart } = state
 
   const handleAddToCart = () => {
+    dispatch({
+      type: 'NOTIFY',
+      payload: { success: 'Product is added to cart' },
+    })
     dispatch(addToCart(product, cart))
   }
 

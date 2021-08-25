@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SearchEngineOptimization from '../components/SearchEngineOptimization'
 import Link from 'next/link'
-import { useToasts } from '@geist-ui/react'
+import { Button, useToasts } from '@geist-ui/react'
 import { DataContext } from '../store/GlobalState'
 import Cookies from 'js-cookie'
 import { postData } from '../utils/fetchData'
@@ -12,7 +12,7 @@ const SignIn = () => {
   const { email, password } = userData
   const [toasts, setToast] = useToasts()
   const { state, dispatch } = useContext(DataContext)
-  const { auth } = state
+  const { auth, notify } = state
   const router = useRouter()
 
   const handleChangeInput = (e) => {
@@ -59,12 +59,12 @@ const SignIn = () => {
   }, [auth, router])
   return (
     <>
-      <SearchEngineOptimization title={'Sign In Page'} />
+      <SearchEngineOptimization title='Sign In Page' />
 
       <div className='flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl mt-10'>
-        <div className='bg-gradient-to-r from-teal-accent-100 via-teal-accent-200 to-teal-accent-600 hidden bg-cover lg:block lg:w-1/2 '></div>
+        <div className='bg-gradient-to-r from-gray-100 via-gray-200 to-gray-400 hidden bg-cover lg:block lg:w-1/2 '></div>
 
-        <div className='w-full px-6 py-8 md:px-8 lg:w-1/2'>
+        <div className='w-full px-6 py-8 md:px-8 lg:w-1/2 bg-gray-100'>
           <h2 className='text-2xl font-semibold text-center text-gray-900 dark:text-white'>
             Temel Ecommerce
           </h2>
@@ -129,7 +129,7 @@ const SignIn = () => {
               onChange={handleChangeInput}
               id='email'
               type='email'
-              className='block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-teal-accent-400 dark:focus:border-teal-accent-400  focus:outline-none focus:ring'
+              className='vercel-button'
             />
           </div>
 
@@ -155,18 +155,20 @@ const SignIn = () => {
               onChange={handleChangeInput}
               id='password'
               type='password'
-              className='block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md   focus:border-teal-accent-400  focus:outline-none focus:ring'
+              className='vercel-button'
             />
           </div>
 
           <div className='mt-8'>
-            <button
+            <Button
+              loading={notify.loading}
               onClick={handleSubmit}
-              type='submit'
-              className='w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-teal-accent-400 rounded hover:bg-teal-accent-700 focus:outline-none focus:bg-gray-600'
+              type='secondary'
+              htmlType='submit'
+              width='100%'
             >
               Login
-            </button>
+            </Button>
           </div>
 
           <div className='flex items-center justify-between mt-4'>

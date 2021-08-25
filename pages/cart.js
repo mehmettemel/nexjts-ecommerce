@@ -1,5 +1,7 @@
 import { Button, Note, Text } from '@geist-ui/react'
+import { route } from 'next/dist/server/router'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import CartInfo from '../components/cart/CartInfo'
 import CartItem from '../components/cart/CartItem'
@@ -8,15 +10,17 @@ import { getData, postData } from '../utils/fetchData'
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext)
-  const { cart, auth } = state
-
+  const { cart, auth, orders } = state
+  const router = useRouter()
   const [total, setTotal] = useState(0)
+  const [callback, setCallback] = useState(false)
   const [shippingState, setShippingState] = useState({
     address: '',
     firstName: '',
     lastName: '',
     mobile: '',
   })
+  const { address, firstName, lastName, mobile } = shippingState
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target
@@ -24,14 +28,47 @@ const Cart = () => {
   }
 
   const handlePayment = async () => {
-    // dispatch({ type: 'NOTIFY', loading: true })
+    if (!auth.user) return router.push('/signin')
+    if (!address || !firstName || !lastName || !mobile) {
+      return dispatch({
+        type: 'NOTIFY',
+        payload: { error: 'You should fill all the fields' },
+      })
+    }
+    let newCart = []
+    for (const item of cart) {
+      const res = await getData(`product/${item._id}`)
+      if (res.product.inStock - item.quantity >= 0) {
+        newCart.push(item)
+      }
+    }
+    if (newCart.length < cart.length) {
+      setCallback(!callback)
+      return dispatch({
+        type: 'NOTIFY',
+        payload: {
+          error: 'The product is out of stock or the quantity is insufficent',
+        },
+      })
+    }
+    dispatch({
+      type: 'NOTIFY',
+      payload: {
+        loading: true,
+      },
+    })
     postData('order', { shippingState, cart, total }, auth.token).then(
       (res) => {
         if (res.err)
           return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
-
+        const newOrder = {
+          ...res.newOrder,
+          user: auth.user,
+        }
         dispatch({ type: 'ADD_CART', payload: [] })
-        return dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
+        dispatch({ type: 'ADD_ORDERS', payload: [...orders, newOrder] })
+        dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
+        return router.push(`/order/${res.newOrder._id}`)
       }
     )
   }
@@ -79,19 +116,12 @@ const Cart = () => {
       {
         <>
           {cart.length === 0 ? (
-            <div>
-              <Note filled>Your cart is empty.Please add products</Note>
-            </div>
+            <Note filled>Your cart is empty.Please add products</Note>
           ) : (
             <>
               <ul className='flex flex-col divide-y divide-coolGray-300'>
                 {cart.map((item) => (
-                  <CartItem
-                    key={item._id}
-                    item={item}
-                    dispatch={dispatch}
-                    cart={cart}
-                  />
+                  <CartItem key={item._id} item={item} cart={cart} />
                 ))}
               </ul>
 
@@ -110,8 +140,7 @@ const Cart = () => {
                 <Link href='/'>
                   <a>
                     <Button width='100%' type='secondary'>
-                      Back{' '}
-                      <span className='sr-only sm:not-sr-only'> to shop</span>
+                      Back to shop
                     </Button>
                   </a>
                 </Link>
@@ -119,9 +148,8 @@ const Cart = () => {
                   <a>
                     <Button width='50%' onClick={handlePayment}>
                       <span className='sr-only sm:not-sr-only'>
-                        Continue to
-                      </span>{' '}
-                      Checkout
+                        Give your Order
+                      </span>
                     </Button>
                   </a>
                 </Link>

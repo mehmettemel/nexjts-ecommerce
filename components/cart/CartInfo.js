@@ -50,7 +50,7 @@ const CartInfo = ({ shippingState, onChangeHandler }) => {
               value={shippingState.mobile}
               name='mobile'
               id='mobile'
-              type='mobile'
+              type='tel'
               placeholder='Your mobile number'
               className='vercel-button'
             />

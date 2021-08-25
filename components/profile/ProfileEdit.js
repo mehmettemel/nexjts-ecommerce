@@ -86,14 +86,19 @@ const ProfileEdit = ({
                 alt={auth.user.name}
                 className='w-10 h-10 rounded-full bg-coolGray-300'
               />
-
-              <input
-                accept='image/*'
-                type='file'
-                name='avatar'
-                id='avatar'
-                onChange={handleAvatar}
-              />
+              <Button type='secondary'>
+                <label className='cursor-pointer'>
+                  <input
+                    hidden
+                    accept='image/*'
+                    type='file'
+                    name='avatar'
+                    id='avatar'
+                    onChange={handleAvatar}
+                  />
+                  Change Avatar
+                </label>
+              </Button>
             </div>
           </div>
           <div className='col-span-full mt-2'>

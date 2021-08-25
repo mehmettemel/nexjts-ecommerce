@@ -13,7 +13,7 @@ import valid from '../utils/valid'
 const Profile = () => {
   const { state, dispatch } = useContext(DataContext)
   const [toasts, setToast] = useToasts()
-  const { auth } = state
+  const { auth, orders } = state
   const initialState = {
     avatar: '',
     name: '',
@@ -128,7 +128,7 @@ const Profile = () => {
             handleAvatar={handleAvatar}
           />
         </div>
-        <ProfileOrders />
+        <ProfileOrders orders={orders} />
       </section>
     </Fragment>
   )

@@ -1,4 +1,4 @@
-import { useToasts } from '@geist-ui/react'
+import { useToasts, Button } from '@geist-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { DataContext } from '../store/GlobalState'
 import { postData } from '../utils/fetchData'
@@ -12,7 +12,7 @@ const SignUp = () => {
   const { name, email, password, cf_password } = userData
   const [toasts, setToast] = useToasts()
   const { state, dispatch } = useContext(DataContext)
-  const { auth } = state
+  const { auth, notify } = state
   const router = useRouter()
   useEffect(() => {
     if (Object.keys(auth).length !== 0) router.push('/')
@@ -52,6 +52,7 @@ const SignUp = () => {
         type: 'success',
       })
     }
+    router.push('/signin')
   }
   return (
     <div>
@@ -71,7 +72,7 @@ const SignUp = () => {
                 onChange={handleChangeInput}
                 id='name'
                 type='text'
-                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500  focus:outline-none focus:ring'
+                className='vercel-button'
               />
             </div>
 
@@ -85,7 +86,7 @@ const SignUp = () => {
                 onChange={handleChangeInput}
                 id='email'
                 type='email'
-                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-teal-600  focus:outline-none focus:ring'
+                className='vercel-button'
               />
             </div>
 
@@ -99,7 +100,7 @@ const SignUp = () => {
                 onChange={handleChangeInput}
                 id='password'
                 type='password'
-                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500  focus:outline-none focus:ring'
+                className='vercel-button'
               />
             </div>
 
@@ -113,18 +114,15 @@ const SignUp = () => {
                 onChange={handleChangeInput}
                 id='cf_password'
                 type='password'
-                className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring'
+                className='vercel-button'
               />
             </div>
           </div>
 
           <div className='flex justify-end mt-6'>
-            <button
-              type='submit'
-              className='px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-900 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600'
-            >
+            <Button loading={notify.loading} type='secondary' htmlType='submit'>
               Sign Up
-            </button>
+            </Button>
           </div>
         </form>
         <div className='w-full mt-5 '>

@@ -3,7 +3,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/dist/client/router'
 import { DataContext } from '../store/GlobalState'
 import Cookies from 'js-cookie'
-import { useToasts, Badge, BadgeAnchor } from '@geist-ui/react'
+import {
+  useToasts,
+  Badge,
+  BadgeAnchor,
+  Avatar,
+  ButtonDropdown,
+} from '@geist-ui/react'
 
 const Navbar = () => {
   const { state, dispatch } = useContext(DataContext)
@@ -23,36 +29,50 @@ const Navbar = () => {
     Cookies.remove('refreshtoken', { path: 'api/auth/accessToken' })
     localStorage.removeItem('firstLogin')
     dispatch({ type: 'AUTH', payload: {} })
-
     setToast({
       text: 'Logged out successfully',
       type: 'success',
     })
+    return router.push('/')
   }
   const loggedRouter = () => {
     return (
       <>
         <ul className='flex items-center hidden ml-auto space-x-8 lg:flex'>
-          <li>
-            <Link href='/profile'>
-              <a
-                className='inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none'
-                aria-label='Sign up'
-                title='Sign up'
-              >
-                {auth.user.name}
-              </a>
-            </Link>
-          </li>
-          <li>
-            <a
-              onClick={handleLogout}
-              aria-label='Logout'
-              title='Logout'
-              className={`font-medium tracking-wide transition-colors duration-200 text-gray-100 cursor-pointer hover:text-teal-accent-400 `}
-            >
-              Logout
-            </a>
+          <li className='flex items-center space-x-3'>
+            <Avatar src={auth.user.avatar} width='40px' height='40px' />
+            <ButtonDropdown type='secondary'>
+              <ButtonDropdown.Item main>{auth.user.name}</ButtonDropdown.Item>
+              <ButtonDropdown.Item>
+                <Link href='/profile'>
+                  <a className='w-full'>Your Profile</a>
+                </Link>
+              </ButtonDropdown.Item>
+              {auth.user.role === 'admin' ? (
+                <ButtonDropdown.Item>
+                  <Link href='/users'>
+                    <a className='w-full'>Users</a>
+                  </Link>
+                </ButtonDropdown.Item>
+              ) : null}
+              {auth.user.role === 'admin' ? (
+                <ButtonDropdown.Item>
+                  <Link href='/create'>
+                    <a className='w-full'>Products</a>
+                  </Link>
+                </ButtonDropdown.Item>
+              ) : null}
+              {auth.user.role === 'admin' ? (
+                <ButtonDropdown.Item>
+                  <Link href='/categories'>
+                    <a className='w-full'>Categories</a>
+                  </Link>
+                </ButtonDropdown.Item>
+              ) : null}
+              <ButtonDropdown.Item onClick={handleLogout}>
+                Logout
+              </ButtonDropdown.Item>
+            </ButtonDropdown>
           </li>
         </ul>
       </>
@@ -268,7 +288,7 @@ const Navbar = () => {
                         </li>
 
                         {Object.keys(auth).length === 0 ? (
-                          <ul className='flex items-center hidden ml-auto space-x-8 lg:flex'>
+                          <>
                             <li>
                               <Link href='/signin'>
                                 <a
@@ -291,7 +311,7 @@ const Navbar = () => {
                                 </a>
                               </Link>
                             </li>
-                          </ul>
+                          </>
                         ) : (
                           <>
                             <li>
