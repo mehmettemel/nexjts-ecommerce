@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    BASE_URL: 'https://temel-ecommerce.vercel.app',
+    BASE_URL: 'http://localhost:3000',
     MONGODB_URL:
       'mongodb+srv://temel:temel123@cluster0.jc4ws.mongodb.net/temelEcommerce?retryWrites=true&w=majority',
     ACCESS_TOKEN_SECRET: 'vC7g/>#Vct/]Y6',

@@ -29,23 +29,19 @@ export const DataProvider = ({ children }) => {
           },
         })
       })
-      getData('categories').then((res) => {
-        if (res.err)
-          return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
-        dispatch({
-          type: 'ADD_CATEGORIES',
-          payload: res.categories,
-        })
-      })
     }
+    getData('categories').then((res) => {
+      if (res.err) return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+      dispatch({
+        type: 'ADD_CATEGORIES',
+        payload: res.categories,
+      })
+    })
   }, [])
   useEffect(() => {
-    const __next__cart01__temel = JSON.parse(
-      localStorage.getItem('__next__cart01__temel')
-    )
+    const __next__cart01__temel = JSON.parse(localStorage.getItem('__next__cart01__temel'))
 
-    if (__next__cart01__temel)
-      dispatch({ type: 'ADD_CART', payload: __next__cart01__temel })
+    if (__next__cart01__temel) dispatch({ type: 'ADD_CART', payload: __next__cart01__temel })
   }, [])
 
   useEffect(() => {
@@ -54,15 +50,13 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     if (auth.token) {
       getData('order', auth.token).then((res) => {
-        if (res.err)
-          return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+        if (res.err) return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
         dispatch({ type: 'ADD_ORDERS', payload: res.orders })
       })
 
       if (auth.user.role === 'admin') {
         getData('user', auth.token).then((res) => {
-          if (res.err)
-            return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+          if (res.err) return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
           dispatch({ type: 'ADD_USERS', payload: res.users })
         })
       }
@@ -72,9 +66,5 @@ export const DataProvider = ({ children }) => {
     }
   }, [auth.token])
 
-  return (
-    <DataContext.Provider value={{ state, dispatch }}>
-      {children}
-    </DataContext.Provider>
-  )
+  return <DataContext.Provider value={{ state, dispatch }}>{children}</DataContext.Provider>
 }

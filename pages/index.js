@@ -13,7 +13,6 @@ export default function Home(props) {
   const [products, setProducts] = useState(props.products)
   const [page, setPage] = useState(1)
   const router = useRouter()
-
   useEffect(() => {
     setProducts(props.products)
   }, [props.products])
@@ -54,6 +53,7 @@ export default function Home(props) {
           </Button>
         )}
       </div>
+      <button onClick={() => router.push({})}>query denem</button>
     </>
   )
 }

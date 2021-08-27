@@ -1,16 +1,12 @@
 import { Card, Select } from '@geist-ui/react'
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useState } from 'react'
-import { getData } from '../utils/fetchData'
 import { filterSearch } from '../utils/filterSearch'
 const Filter = ({ state }) => {
   const router = useRouter()
   const { categories } = state
 
-  const [title, setTitle] = useState('')
   const [search, setSearch] = useState('')
-  const [sort, setSort] = useState('')
-  const [category, setCategory] = useState('')
 
   useEffect(() => {
     filterSearch({ router, search: search ? search.toLowerCase() : 'all' })
@@ -27,7 +23,7 @@ const Filter = ({ state }) => {
     <>
       <div className='my-4'>
         <Card>
-          <div className='flex justify-between items-center flex-wrap'>
+          <div className='flex justify-between items-center flex-col space-y-5 md:flex-row md:space-y-0 md:space-x-4'>
             <Select placeholder='Filter results' onChange={filterHandler}>
               <Select.Option value='all'>All Products</Select.Option>
               {categories.map((item) => (

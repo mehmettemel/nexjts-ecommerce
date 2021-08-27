@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  Divider,
-  Link as GeistLink,
-  Modal,
-  Note,
-  Text,
-} from '@geist-ui/react'
+import { Button, Card, Divider, Link as GeistLink, Modal, Note, Text } from '@geist-ui/react'
 import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 import { DataContext } from '../../store/GlobalState'
@@ -38,8 +30,7 @@ const ProductItem = ({ product }) => {
   }
   const handleSubmit = () => {
     deleteData(`product/${modal[0].id}`, auth.token).then((res) => {
-      if (res.err)
-        return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+      if (res.err) return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
       setModalState(false)
       router.reload()
       return dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
@@ -121,9 +112,7 @@ const ProductItem = ({ product }) => {
           <Note filled>Out Stock</Note>
         )}
       </Text>
-      <Card.Footer>
-        {!auth.user || auth.user.role !== 'admin' ? userLink() : adminLink()}
-      </Card.Footer>
+      <Card.Footer>{!auth.user || auth.user.role !== 'admin' ? userLink() : adminLink()}</Card.Footer>
     </Card>
   )
 }

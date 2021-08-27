@@ -61,7 +61,7 @@ const Categories = () => {
     <>
       <SearchEngineOptimization title='Categories' />
       <div
-        className='w-full bg-gray-500 mt-12'
+        className='w-full bg-gray-500 my-12'
         style={{
           backgroundImage: "url('https://source.unsplash.com/random/640x480')",
           backgroundPosition: 'center center',

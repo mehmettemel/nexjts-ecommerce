@@ -1,5 +1,4 @@
 import { Button, Note, Text } from '@geist-ui/react'
-import { route } from 'next/dist/server/router'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
@@ -57,20 +56,17 @@ const Cart = () => {
         loading: true,
       },
     })
-    postData('order', { shippingState, cart, total }, auth.token).then(
-      (res) => {
-        if (res.err)
-          return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
-        const newOrder = {
-          ...res.newOrder,
-          user: auth.user,
-        }
-        dispatch({ type: 'ADD_CART', payload: [] })
-        dispatch({ type: 'ADD_ORDERS', payload: [...orders, newOrder] })
-        dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
-        return router.push(`/order/${res.newOrder._id}`)
+    postData('order', { shippingState, cart, total }, auth.token).then((res) => {
+      if (res.err) return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+      const newOrder = {
+        ...res.newOrder,
+        user: auth.user,
       }
-    )
+      dispatch({ type: 'ADD_CART', payload: [] })
+      dispatch({ type: 'ADD_ORDERS', payload: [...orders, newOrder] })
+      dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
+      return router.push(`/order/${res.newOrder._id}`)
+    })
   }
 
   useEffect(() => {
@@ -125,10 +121,7 @@ const Cart = () => {
                 ))}
               </ul>
 
-              <CartInfo
-                shippingState={shippingState}
-                onChangeHandler={onChangeHandler}
-              />
+              <CartInfo shippingState={shippingState} onChangeHandler={onChangeHandler} />
               <div className='space-y-1 text-right'>
                 <p>
                   Total amount:
@@ -147,9 +140,7 @@ const Cart = () => {
                 <Link href={auth.user ? '#' : '/signin'}>
                   <a>
                     <Button width='50%' onClick={handlePayment}>
-                      <span className='sr-only sm:not-sr-only'>
-                        Give your Order
-                      </span>
+                      <span className='sr-only sm:not-sr-only'>Give your Order</span>
                     </Button>
                   </a>
                 </Link>
