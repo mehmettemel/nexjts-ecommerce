@@ -26,14 +26,12 @@ const SignIn = () => {
     dispatch({ type: 'NOTIFY', payload: { loading: true } })
 
     const res = await postData('auth/login', userData)
-
+    dispatch({ type: 'NOTIFY', payload: { loading: false } })
     if (res.err)
       return setToast({
         text: res.err,
         type: 'error',
       })
-
-    dispatch({ type: 'NOTIFY', payload: { loading: false } })
 
     dispatch({
       type: 'AUTH',

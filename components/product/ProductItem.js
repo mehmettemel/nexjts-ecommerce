@@ -3,18 +3,48 @@ import {
   Card,
   Divider,
   Link as GeistLink,
+  Modal,
   Note,
   Text,
 } from '@geist-ui/react'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Link from 'next/link'
 import { DataContext } from '../../store/GlobalState'
 import { addToCart } from '../../store/Actions'
+import { deleteData } from '../../utils/fetchData'
+import { useRouter } from 'next/dist/client/router'
 
 const ProductItem = ({ product }) => {
   const { state, dispatch } = useContext(DataContext)
-  const { cart } = state
-
+  const { cart, auth, modal } = state
+  const [modalState, setModalState] = useState(false)
+  const router = useRouter()
+  const handler = () => {
+    dispatch({
+      type: 'ADD_MODAL',
+      payload: [
+        {
+          data: '',
+          id: product._id,
+          title: product.title,
+          type: '',
+        },
+      ],
+    })
+    setModalState(true)
+  }
+  const closeHandler = (event) => {
+    setModalState(false)
+  }
+  const handleSubmit = () => {
+    deleteData(`product/${modal[0].id}`, auth.token).then((res) => {
+      if (res.err)
+        return dispatch({ type: 'NOTIFY', payload: { error: res.err } })
+      setModalState(false)
+      router.reload()
+      return dispatch({ type: 'NOTIFY', payload: { success: res.msg } })
+    })
+  }
   const handleAddToCart = () => {
     dispatch({
       type: 'NOTIFY',
@@ -22,7 +52,31 @@ const ProductItem = ({ product }) => {
     })
     dispatch(addToCart(product, cart))
   }
-
+  const adminLink = () => {
+    return (
+      <>
+        <GeistLink block>
+          <Link href={`create/${product._id}`}>
+            <a>Edit</a>
+          </Link>
+        </GeistLink>
+        <Button type='error' width='50%' onClick={handler}>
+          Delete
+        </Button>
+        <Modal visible={modalState} onClose={closeHandler}>
+          <Modal.Title>{modal.title}</Modal.Title>
+          <Modal.Subtitle>Temel E-commerce</Modal.Subtitle>
+          <Modal.Content>
+            <p>Are you sure to remove {modal.title}?</p>
+          </Modal.Content>
+          <Modal.Action passive onClick={() => setModalState(false)}>
+            Cancel
+          </Modal.Action>
+          <Modal.Action onClick={handleSubmit}>Sure</Modal.Action>
+        </Modal>
+      </>
+    )
+  }
   const userLink = () => {
     return (
       <>
@@ -67,7 +121,9 @@ const ProductItem = ({ product }) => {
           <Note filled>Out Stock</Note>
         )}
       </Text>
-      <Card.Footer>{userLink()}</Card.Footer>
+      <Card.Footer>
+        {!auth.user || auth.user.role !== 'admin' ? userLink() : adminLink()}
+      </Card.Footer>
     </Card>
   )
 }

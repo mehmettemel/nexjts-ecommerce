@@ -6,6 +6,7 @@ import Check from '@geist-ui/react-icons/check'
 import { X } from '@geist-ui/react-icons'
 import { deleteData } from '../utils/fetchData'
 import router from 'next/router'
+import SearchEngineOptimization from '../components/SearchEngineOptimization'
 const Users = () => {
   const { state, dispatch } = useContext(DataContext)
   const { users, auth, modal } = state
@@ -90,20 +91,23 @@ const Users = () => {
   }))
   if (!auth.user) return null
   return (
-    <div className='py-5'>
-      <h2 className='text-lg md:text-2xl'>Users</h2>
-      <div className='my-2 overflow-x-auto'>
-        <Table data={dataSource} onChange={(value) => setData(value)}>
-          <Table.Column prop='id' label='id' />
-          <Table.Column prop='avatar' label='avatar' />
-          <Table.Column prop='name' label='name' />
-          <Table.Column prop='email' label='email' />
-          <Table.Column prop='admin' label='admin' />
-          <Table.Column prop='edit' label='edit'></Table.Column>
-          <Table.Column prop='delete' label='delete'></Table.Column>
-        </Table>
+    <>
+      <SearchEngineOptimization title='Users' />
+      <div className='py-5'>
+        <h2 className='text-lg md:text-2xl'>Users</h2>
+        <div className='my-2 overflow-x-auto'>
+          <Table data={dataSource} onChange={(value) => setData(value)}>
+            <Table.Column prop='id' label='id' />
+            <Table.Column prop='avatar' label='avatar' />
+            <Table.Column prop='name' label='name' />
+            <Table.Column prop='email' label='email' />
+            <Table.Column prop='admin' label='admin' />
+            <Table.Column prop='edit' label='edit'></Table.Column>
+            <Table.Column prop='delete' label='delete'></Table.Column>
+          </Table>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
