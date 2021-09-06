@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
     <div className='min-h-screen flex flex-col'>
       <Navbar />
       <Notify />
-      <div className='max-w-screen-2xl mx-auto flex-1 '>{children}</div>
+      <div>{children}</div>
       <Footer />
     </div>
   )

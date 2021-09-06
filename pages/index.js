@@ -53,7 +53,6 @@ export default function Home(props) {
           </Button>
         )}
       </div>
-      <button onClick={() => router.push({})}>query denem</button>
     </>
   )
 }
